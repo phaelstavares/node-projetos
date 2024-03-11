@@ -1,26 +1,22 @@
 const express = require("express") // importei o express no projeto
 const porta = 3000
 const app = express() // para facilitar coloquei o express dentro do variável 'app'
+app.use(express.json()) // avisar para o express que é para usar por padrão o '.json' em vez de 'xml' e etc...
 
 /*
     - Query params -> meusite.com/users?name=raphael&age=19     // FILTROS
     - Route params -> /users/2      // BUSCAR, DELETAR OU ATUALIZAR ALGO ESPECÍFICO
+    - Request Body -> {"name": "Raphael", "age":}
 */
 
 // primeira rota
-app.get("/users/:id", (request, response) => {
-    const {id} = request.params
+app.get("/users", (request, response) => {
+    
+    const { name, age } = request.body
 
-    console.log(id)
+    console.log(request.body) // app.use(express.json())
 
-    return response.json({id})
-
-    /* const name = request.query.name
-    const age = request.query.age
-
-    console.log(name, age)
-
-    return response.json({name: name, age: age})*/
+    return response.json({ name, age })
 })
 
 app.listen(porta, () => {
