@@ -8,13 +8,19 @@ const app = express() // para facilitar coloquei o express dentro do variável '
 */
 
 // primeira rota
-app.get("/users", (request, response) => {
-    const name = request.query.name
+app.get("/users/:id", (request, response) => {
+    const {id} = request.params
+
+    console.log(id)
+
+    return response.json({id})
+
+    /* const name = request.query.name
     const age = request.query.age
 
     console.log(name, age)
 
-    return response.json({name: name, age: age})
+    return response.json({name: name, age: age})*/
 })
 
 app.listen(porta, () => {
@@ -28,4 +34,6 @@ app.listen(porta, () => {
     para parar o servidor usa o 'ctrl + c'
 
     http://localhost:3000/users?name=raphael&age=19
+
+    npm run dev - o servidor começa a rodar ('dev' é o nome dado em 'package.json')
 */
