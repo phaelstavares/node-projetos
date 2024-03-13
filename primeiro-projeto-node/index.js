@@ -16,9 +16,8 @@ app.use(express.json()) // avisar para o express que é para usar por padrão o 
     - DELETE       -> Deletar informações no back-end
 */
 
-const users = []
+const users = [] // nunca vamos utilizar variável, foi somente para métodos didáticos (se o servidor for reiniciado, os dados são perdidos)
 
-// primeira rota
 app.get("/users", (request, response) => {
     return response.json(users)
 })
@@ -48,6 +47,20 @@ app.put("/users/:id", (request, response) => {
     users[index] = updateUser
 
     return response.json(updateUser)
+})
+
+app.delete("/users/:id", (request, response) => {
+    const { id } = request.params
+
+    const index = users.findIndex(user => user.id === id)
+
+    if(index < 0) {
+        return response.status(404).json({ message: "User not found"})
+    }
+
+    users.splice(index, 1)
+
+    return response.status(204).json()
 })
 
 
