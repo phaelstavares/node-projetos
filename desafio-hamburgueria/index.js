@@ -57,7 +57,7 @@ app.get("/order", (request, response) => {
 app.post("/order", (request, response) => {
     const { requests, clienteName, price, status } = request.body
 
-    const order = { id: uuid.v4(), requests: requests, clienteName: clienteName, price: price, status: status }
+    const order = { id: uuid.v4(), requests: requests, clienteName: clienteName, price: price, status: "Novo pedido" }
 
     users.push(order)
 
@@ -65,18 +65,29 @@ app.post("/order", (request, response) => {
 })
 
 app.put("/order/:id", checkUserId, (request, response) => {
-    const { requests, clienteName, price, status } = request.body
-    const index = request.userIndex
-    const id = request.userId
+    const { requests, clienteName, price } = request.body;
+    const index = request.userIndex;
 
-    const updateUser = { id, requests, clienteName, price, status }
+    // Verifica se foram fornecidos novos valores para requests, clienteName e price
+    if (requests !== undefined) {
+        users[index].requests = requests;
+    }
+    if (clienteName !== undefined) {
+        users[index].clienteName = clienteName;
+    }
+    if (price !== undefined) {
+        users[index].price = price;
+    }
 
-    users[index] = updateUser
+    // Atualiza o status para "Em preparação"
+    users[index].status = "Em preparação"
 
-    return response.json(updateUser)
+    const updatedOrder = users[index];
+
+    return response.json(updatedOrder);
 })
 
-app.delete("/order/:id", checkDelete, (request, response) => {
+app.delete("/order/:id", checkDelete, (request, response) => { 
     const index = request.userIndex
 
     users.splice(index, 1)
@@ -84,6 +95,32 @@ app.delete("/order/:id", checkDelete, (request, response) => {
     return response.status(204).json()
 })
 
+app.get("/order/:id", (request, response) => {
+    return response.json(users)
+})
+
+app.patch("/order/:id", checkUserId, (request, response) => {
+    const { requests, clienteName, price } = request.body;
+    const index = request.userIndex;
+
+    // Verifica se foram fornecidos novos valores para requests, clienteName e price
+    if (requests !== undefined) {
+        users[index].requests = requests;
+    }
+    if (clienteName !== undefined) {
+        users[index].clienteName = clienteName;
+    }
+    if (price !== undefined) {
+        users[index].price = price;
+    }
+
+    // Atualiza o status para "Pedido pronto"
+    users[index].status = "Pedido pronto"
+
+    const updatedOrder = users[index];
+
+    return response.json(updatedOrder);
+});
 
 app.listen(porta, () => {
     console.log(`🚀 Servidor online na porta ${porta}`)
