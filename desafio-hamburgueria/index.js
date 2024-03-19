@@ -95,8 +95,11 @@ app.delete("/order/:id", checkDelete, (request, response) => {
     return response.status(204).json()
 })
 
-app.get("/order/:id", (request, response) => {
-    return response.json(users)
+app.get("/order/:id", checkUserId, (request, response) => {
+    const index = request.userIndex;
+    const atualizar = users[index]
+    
+    return response.json(atualizar)
 })
 
 app.patch("/order/:id", checkUserId, (request, response) => {
